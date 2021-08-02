@@ -21,6 +21,7 @@ input_side_packet: "NUM_HANDS:num_hands"
 # framework will internally inform the downstream calculators of the absence of
 # this packet so that they don't wait for it unnecessarily.
 output_stream: "LANDMARKS:multi_hand_landmarks"
+output_stream: "SCALED_LANDMARKS:multi_hand_scaled_landmarks"
 # Collection of handedness of the detected hands (i.e. is hand left or right),
 # each represented as a Classification proto.
 # Note that handedness is determined assuming the input image is mirrored,
@@ -181,6 +182,7 @@ node {
   input_stream: "ROI:single_hand_rect"
   output_stream: "LANDMARKS:single_hand_landmarks"
   output_stream: "HANDEDNESS:single_handedness"
+  output_stream: "SCALED_LANDMARKS:single_hand_scaled_landmarks"
 }
 
 # Collects the handedness for each single hand into a vector. Upon
@@ -210,6 +212,16 @@ node {
   input_stream: "ITEM:single_hand_landmarks"
   input_stream: "BATCH_END:hand_rects_timestamp"
   output_stream: "ITERABLE:multi_hand_landmarks"
+}
+
+# Collects a set of landmarks for each hand into a vector. Upon receiving the
+# BATCH_END timestamp, outputs the vector of landmarks at the BATCH_END
+# timestamp.
+node {
+  calculator: "EndLoopNormalizedLandmarkListVectorCalculator"
+  input_stream: "ITEM:single_hand_scaled_landmarks"
+  input_stream: "BATCH_END:hand_rects_timestamp"
+  output_stream: "ITERABLE:multi_hand_scaled_landmarks"
 }
 
 # Collects a NormalizedRect for each hand into a vector. Upon receiving the

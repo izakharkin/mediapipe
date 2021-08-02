@@ -19,6 +19,8 @@ output_stream: "LANDMARKS:hand_landmarks"
 # (ClassificationList)
 output_stream: "HANDEDNESS:handedness"
 
+output_stream: "SCALED_LANDMARKS:scaled_landmarks"
+
 # Transforms a region of image into a 224x224 tensor while keeping the aspect
 # ratio, and therefore may result in potential letterboxing.
 node {

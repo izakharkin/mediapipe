@@ -24,11 +24,33 @@ cc_binary(
     ],
 )
 
+# cc_binary(
+#     name = "hand_tracking_cpu",
+#     deps = [
+#         "//mediapipe/examples/desktop:demo_run_graph_main",
+#         "//mediapipe/graphs/hand_tracking:desktop_tflite_calculators",
+#     ],
+# )
+
 cc_binary(
     name = "hand_tracking_cpu",
+    srcs = ["hand_tracking_cpu_main.cc"],
     deps = [
-        "//mediapipe/examples/desktop:demo_run_graph_main",
+        "//mediapipe/framework:calculator_framework",
+        "//mediapipe/framework/formats:image_frame",
+        "//mediapipe/framework/formats:image_frame_opencv",
+        "//mediapipe/framework/port:file_helpers",
+        "//mediapipe/framework/port:opencv_highgui",
+        "//mediapipe/framework/port:opencv_imgproc",
+        "//mediapipe/framework/port:opencv_video",
+        "//mediapipe/framework/port:parse_text_proto",
+        "//mediapipe/framework/port:status",
         "//mediapipe/graphs/hand_tracking:desktop_tflite_calculators",
+        "//mediapipe/calculators/util:rect_to_render_data_calculator",
+        "//mediapipe/framework/formats:rect_cc_proto",
+        "@com_google_absl//absl/flags:flag",
+        "@com_google_absl//absl/flags:parse",
+        "//mediapipe/framework/formats:classification_cc_proto",
     ],
 )
 
