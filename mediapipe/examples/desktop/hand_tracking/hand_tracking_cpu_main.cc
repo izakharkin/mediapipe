@@ -106,6 +106,7 @@ absl::Status RunMPPGraph(
 //   }
 
   LOG(INFO) << "Start running the calculator graph.";
+  
   ASSIGN_OR_RETURN(::mediapipe::OutputStreamPoller poller,
                    graph->AddOutputStreamPoller(kOutputStream));
   ASSIGN_OR_RETURN(::mediapipe::OutputStreamPoller handedness_poller,
@@ -116,6 +117,9 @@ absl::Status RunMPPGraph(
                    graph->AddOutputStreamPoller(kScaledLandmarksOutputStream));
   ASSIGN_OR_RETURN(::mediapipe::OutputStreamPoller hand_rect_poller,
                    graph->AddOutputStreamPoller(kHandRectFromLandmarksStream));
+  ASSIGN_OR_RETURN(mediapipe::OutputStreamPoller presence_poller,
+                   graph->AddOutputStreamPoller("handedness_presence"));
+  
   MP_RETURN_IF_ERROR(graph->StartRun({}));
   
   bool grab_frames = true;
@@ -149,36 +153,44 @@ absl::Status RunMPPGraph(
     if (!poller.Next(&packet)) break;
     auto& output_frame = packet.Get<::mediapipe::ImageFrame>();
       
-    // Get the packet containing type of each hand in a corresponding order
-    ::mediapipe::Packet handedness_packet;
-    if (!handedness_poller.Next(&handedness_packet)) break;
-    const auto& handedness = handedness_packet.Get<std::vector<::mediapipe::ClassificationList>>();
-    LOG(INFO) << handedness[0].classification(0).label() << std::endl; 
+    // check whether the packet exists
+    ::mediapipe::Packet presence_packet;
+    if (!presence_poller.Next(&presence_packet)) break;
+    auto is_handedness_present = presence_packet.Get<bool>();
 
-    // Get the packets containing hand_landmarks.
-    ::mediapipe::Packet hand_landmarks_packet;
-    if (!hand_landmarks_poller.Next(&hand_landmarks_packet)) break;
-    const auto& hand_landmarks = hand_landmarks_packet.Get<std::vector<::mediapipe::NormalizedLandmarkList>>();
-    for (const auto& x: hand_landmarks) {
-        PrintLandmarks(x, LOG(INFO), 640, 480, 1);
-    }
-    
-    // Get the packets containing scaled_landmarks.
-    ::mediapipe::Packet scaled_landmarks_packet;
-    if (!scaled_landmarks_poller.Next(&scaled_landmarks_packet)) break;
-    const auto& scaled_landmarks = scaled_landmarks_packet.Get<std::vector<::mediapipe::NormalizedLandmarkList>>();
-    for (const auto& x: scaled_landmarks) {
-        PrintLandmarks(x, LOG(INFO), 1, 1, 1);
-    }
-    
-    // Get the packets containing hand_rect.
-    ::mediapipe::Packet hand_rect_packet;
-    if (!hand_rect_poller.Next(&hand_rect_packet)) break;
-    const auto& hand_rect = hand_rect_packet.Get<std::vector<::mediapipe::NormalizedRect>>();
-    LOG(INFO) << "rect[0] square: " << hand_rect[0].height() * hand_rect[0].width() << std::endl;
-    LOG(INFO) << "rect[1] square: " << hand_rect[1].height() * hand_rect[1].width() << std::endl;
+    if (is_handedness_present) {
       
-    LOG(INFO) << std::endl;     
+        // Get the packet containing type of each hand in a corresponding order
+        ::mediapipe::Packet handedness_packet;
+        if (!handedness_poller.Next(&handedness_packet)) break;
+        const auto& handedness = handedness_packet.Get<std::vector<::mediapipe::ClassificationList>>();
+        LOG(INFO) << handedness[0].classification(0).label() << std::endl; 
+
+        // Get the packets containing hand_landmarks.
+        ::mediapipe::Packet hand_landmarks_packet;
+        if (!hand_landmarks_poller.Next(&hand_landmarks_packet)) break;
+        const auto& hand_landmarks = hand_landmarks_packet.Get<std::vector<::mediapipe::NormalizedLandmarkList>>();
+        for (const auto& x: hand_landmarks) {
+            PrintLandmarks(x, LOG(INFO), 640, 480, 1);
+        }
+
+        // Get the packets containing scaled_landmarks.
+        ::mediapipe::Packet scaled_landmarks_packet;
+        if (!scaled_landmarks_poller.Next(&scaled_landmarks_packet)) break;
+        const auto& scaled_landmarks = scaled_landmarks_packet.Get<std::vector<::mediapipe::NormalizedLandmarkList>>();
+        for (const auto& x: scaled_landmarks) {
+            PrintLandmarks(x, LOG(INFO), 1, 1, 1);
+        }
+
+        // Get the packets containing hand_rect.
+        ::mediapipe::Packet hand_rect_packet;
+        if (!hand_rect_poller.Next(&hand_rect_packet)) break;
+        const auto& hand_rect = hand_rect_packet.Get<std::vector<::mediapipe::NormalizedRect>>();
+        LOG(INFO) << "rect[0] square: " << hand_rect[0].height() * hand_rect[0].width() << std::endl;
+        LOG(INFO) << "rect[1] square: " << hand_rect[1].height() * hand_rect[1].width() << std::endl;
+
+        LOG(INFO) << std::endl;
+    }
     
     // Convert back to opencv for display or saving.
     cv::Mat output_frame_mat = ::mediapipe::formats::MatView(&output_frame);
