@@ -33,13 +33,6 @@ node {
   output_stream: "SCALED_LANDMARKS:scaled_landmarks"
 }
 
-# add PacketPresenceCalculator
-node {
-  calculator: "PacketPresenceCalculator"
-  input_stream: "PACKET:handedness"
-  output_stream: "PRESENCE:handedness_presence"
-}
-
 # Subgraph that renders annotations and overlays them on top of the input
 # images (see hand_renderer_cpu.pbtxt).
 node {
