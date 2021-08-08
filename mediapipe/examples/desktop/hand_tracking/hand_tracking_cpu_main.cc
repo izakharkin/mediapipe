@@ -108,17 +108,17 @@ absl::Status RunMPPGraph(
   LOG(INFO) << "Start running the calculator graph.";
   
   ASSIGN_OR_RETURN(::mediapipe::OutputStreamPoller poller,
-                   graph->AddOutputStreamPoller(kOutputStream));
+                   graph->AddOutputStreamPoller(kOutputStream, true));
   ASSIGN_OR_RETURN(::mediapipe::OutputStreamPoller handedness_poller,
-                   graph->AddOutputStreamPoller(kHandednessOutputStream));
+                   graph->AddOutputStreamPoller(kHandednessOutputStream, true));
   ASSIGN_OR_RETURN(::mediapipe::OutputStreamPoller hand_landmarks_poller,
-                   graph->AddOutputStreamPoller(kHandLandmarksOutputStream));
+                   graph->AddOutputStreamPoller(kHandLandmarksOutputStream, true));
   ASSIGN_OR_RETURN(::mediapipe::OutputStreamPoller scaled_landmarks_poller,
-                   graph->AddOutputStreamPoller(kScaledLandmarksOutputStream));
+                   graph->AddOutputStreamPoller(kScaledLandmarksOutputStream, true));
   ASSIGN_OR_RETURN(::mediapipe::OutputStreamPoller hand_rect_poller,
-                   graph->AddOutputStreamPoller(kHandRectFromLandmarksStream));
+                   graph->AddOutputStreamPoller(kHandRectFromLandmarksStream, true));
   ASSIGN_OR_RETURN(mediapipe::OutputStreamPoller presence_poller,
-                   graph->AddOutputStreamPoller("handedness_presence"));
+                   graph->AddOutputStreamPoller("handedness_presence", true));
   
   MP_RETURN_IF_ERROR(graph->StartRun({}));
   

@@ -125,9 +125,10 @@ absl::Status OutputStreamObserver::Notify() {
 absl::Status OutputStreamPollerImpl::Initialize(
     const std::string& stream_name, const PacketType* packet_type,
     std::function<void(InputStreamManager*, bool*)> queue_size_callback,
-    OutputStreamManager* output_stream_manager) {
+    OutputStreamManager* output_stream_manager, bool observe_timestamp_bounds) {
   MP_RETURN_IF_ERROR(GraphOutputStream::Initialize(stream_name, packet_type,
-                                                   output_stream_manager));
+                                                   output_stream_manager,
+                                                   observe_timestamp_bounds));
   input_stream_handler_->SetQueueSizeCallbacks(queue_size_callback,
                                                queue_size_callback);
   return absl::OkStatus();
@@ -176,12 +177,16 @@ void OutputStreamPollerImpl::NotifyError() {
 bool OutputStreamPollerImpl::Next(Packet* packet) {
   CHECK(packet);
   bool empty_queue = true;
+  bool observed_timestamp_bound_change = false;
   Timestamp min_timestamp = Timestamp::Unset();
   mutex_.Lock();
   while (true) {
     min_timestamp = input_stream_->MinTimestampOrBound(&empty_queue);
+    observed_timestamp_bound_change =
+        input_stream_handler_->ProcessTimestampBounds() &&
+        prev_output_ts_ < min_timestamp.PreviousAllowedInStream();
     if (graph_has_error_ || !empty_queue ||
-        min_timestamp == Timestamp::Done()) {
+        min_timestamp == Timestamp::Done() || observed_timestamp_bound_change) {
       break;
     } else {
       handler_condvar_.Wait(&mutex_);
@@ -191,17 +196,26 @@ bool OutputStreamPollerImpl::Next(Packet* packet) {
     mutex_.Unlock();
     return false;
   }
+  if (empty_queue) {
+    prev_output_ts_ = min_timestamp.PreviousAllowedInStream();
+  } else {
+    prev_output_ts_ = min_timestamp;
+  }
   mutex_.Unlock();
   if (min_timestamp == Timestamp::Done()) {
     return false;
   }
-  int num_packets_dropped = 0;
-  bool stream_is_done = false;
-  *packet = input_stream_->PopPacketAtTimestamp(
-      min_timestamp, &num_packets_dropped, &stream_is_done);
-  CHECK_EQ(num_packets_dropped, 0)
-      << absl::Substitute("Dropped $0 packet(s) on input stream \"$1\".",
-                          num_packets_dropped, input_stream_->Name());
+  if (!empty_queue) {
+    int num_packets_dropped = 0;
+    bool stream_is_done = false;
+    *packet = input_stream_->PopPacketAtTimestamp(
+        min_timestamp, &num_packets_dropped, &stream_is_done);
+    CHECK_EQ(num_packets_dropped, 0)
+        << absl::Substitute("Dropped $0 packet(s) on input stream \"$1\".",
+                            num_packets_dropped, input_stream_->Name());
+  } else if (observed_timestamp_bound_change) {
+    *packet = Packet().At(Timestamp(min_timestamp.PreviousAllowedInStream()));
+  }
   return true;
 }
 
