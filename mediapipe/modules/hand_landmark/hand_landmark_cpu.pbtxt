@@ -20,6 +20,7 @@ output_stream: "LANDMARKS:hand_landmarks"
 output_stream: "HANDEDNESS:handedness"
 
 output_stream: "SCALED_LANDMARKS:scaled_landmarks"
+output_stream: "HAND_GESTURE:hand_gesture"
 
 # Transforms a region of image into a 224x224 tensor while keeping the aspect
 # ratio, and therefore may result in potential letterboxing.
@@ -163,4 +164,13 @@ node {
   input_stream: "NORM_LANDMARKS:scaled_landmarks"
   input_stream: "NORM_RECT:hand_rect"
   output_stream: "NORM_LANDMARKS:hand_landmarks"
+}
+
+# Recognizes hand gesture based on the scaled (screen-independent) landmarks.
+node {
+  calculator: "HandGestureCalculator"
+  input_stream: "PRESENCE:hand_presence"
+  input_stream: "SCALED_LANDMARKS:scaled_landmarks"
+  input_stream: "NORM_RECT:hand_rect"
+  output_stream: "HAND_GESTURE:hand_gesture"
 }

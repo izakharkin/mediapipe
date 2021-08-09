@@ -19,7 +19,6 @@
 #include <memory>
 #include <vector>
 #include <string>
-// #include <chrono>
 #include <sys/time.h>
 #include <sstream> 
 
@@ -38,6 +37,8 @@
 #include "mediapipe/framework/port/status.h"
 #include "mediapipe/framework/formats/classification.pb.h"
 
+#include "zmq.hpp"
+
 // using namespace std::chrono;
 
 constexpr char kWindowName[] = "MediaPipe";
@@ -50,6 +51,7 @@ constexpr char kHandednessStream[] = "handedness";
 constexpr char kHandLandmarksStream[] = "landmarks";
 constexpr char kScaledLandmarksStream[] = "scaled_landmarks";
 constexpr char kHandRectsStream[] = "multi_hand_rects";
+constexpr char kHandGesturesStream[] = "hand_gestures";
 
 
 ABSL_FLAG(std::string, input_video_path, "",
@@ -117,10 +119,23 @@ absl::Status RunMPPGraph(
                    graph->AddOutputStreamPoller(kScaledLandmarksStream, true));
   ASSIGN_OR_RETURN(::mediapipe::OutputStreamPoller hand_rect_poller,
                    graph->AddOutputStreamPoller(kHandRectsStream, true));
+  ASSIGN_OR_RETURN(mediapipe::OutputStreamPoller hand_gestures_poller,
+                   graph->AddOutputStreamPoller(kHandGesturesStream, true));
   
   MP_RETURN_IF_ERROR(graph->StartRun({}));
   
   bool grab_frames = true;
+    
+  // ZeroMQ setup
+  const std::string& address = "tcp://127.0.0.1:7000";
+  zmq::context_t context(1);
+  zmq::socket_t socket(context, ZMQ_REQ);
+  
+  LOG(INFO) << "Sending the data through ZMQ via " << address << std::endl;
+  socket.connect(address);
+    
+  int frame_num = 0;
+  zmq::message_t reply;
   
   LOG(INFO) << "Start grabbing and processing frames.";
   while (grab_frames) {
@@ -150,6 +165,16 @@ absl::Status RunMPPGraph(
     ::mediapipe::Packet packet;
     if (!poller.Next(&packet)) break;
     auto& output_frame = packet.Get<::mediapipe::ImageFrame>();
+      
+    std::vector<std::string> global_handedness = {"unkwown", "uknown"};
+      
+    // This stream is needed to pass info to ZeroMQ
+    std::stringstream ss;
+    ss << frame_num << std::endl;
+    struct timeval tp;
+    gettimeofday(&tp, NULL);
+    long int ms = tp.tv_sec * 1000 + tp.tv_usec / 1000;
+    ss << ms << std::endl;
 
     // Get the packet containing type of each hand in a corresponding order
     ::mediapipe::Packet handedness_packet;
@@ -158,6 +183,7 @@ absl::Status RunMPPGraph(
       const auto& handedness = handedness_packet.Get<std::vector<::mediapipe::ClassificationList>>();
       LOG(INFO) << handedness.size() << std::endl;
       for (int i = 0; i < handedness.size(); ++i) {
+        global_handedness[i] = handedness[i].classification(0).label();
         LOG(INFO) << handedness[i].classification(0).label() << std::endl; 
       }
     }
@@ -167,9 +193,10 @@ absl::Status RunMPPGraph(
     if (!hand_landmarks_poller.Next(&hand_landmarks_packet)) break;
     if (!hand_landmarks_packet.IsEmpty()) {
       const auto& hand_landmarks = hand_landmarks_packet.Get<std::vector<::mediapipe::NormalizedLandmarkList>>();
-//       for (const auto& x: hand_landmarks) {
+      for (const auto& x: hand_landmarks) {
+        PrintLandmarks(x, ss, 640, 480, 1);
 //         PrintLandmarks(x, LOG(INFO), 640, 480, 1);
-//       }
+      }
     }
 
     // Get the packets containing scaled_landmarks.
@@ -177,21 +204,48 @@ absl::Status RunMPPGraph(
     if (!scaled_landmarks_poller.Next(&scaled_landmarks_packet)) break;
     if (!scaled_landmarks_packet.IsEmpty()) {
       const auto& scaled_landmarks = scaled_landmarks_packet.Get<std::vector<::mediapipe::NormalizedLandmarkList>>();
-//       for (const auto& x: scaled_landmarks) {
+      for (const auto& x: scaled_landmarks) {
+        PrintLandmarks(x, ss, 1, 1, 1);
 //         PrintLandmarks(x, LOG(INFO), 1, 1, 1);
-//       }
+      }
     }
-
+    
+    // Get the packets containing hand_gestures.
+    ::mediapipe::Packet hand_gestures_packet;
+    if (!hand_gestures_poller.Next(&hand_gestures_packet)) break;
+    if (!hand_gestures_packet.IsEmpty()) {
+      const auto& hand_gestures = hand_gestures_packet.Get<std::vector<std::string>>();
+      for (int i = 0; i < hand_gestures.size(); ++i) {
+          LOG(INFO) << global_handedness[i] << " hand_gesture: " << hand_gestures[i] << std::endl;
+          // Currently the Video-Touch system works with the right hand only
+          if (global_handedness[i] == "Right") {
+              ss << hand_gestures[i] << std::endl;
+          }
+      }
+    }
+      
     // Get the packets containing hand_rects.
-    ::mediapipe::Packet hand_rect_packet;
-    if (!hand_rect_poller.Next(&hand_rect_packet)) break;
-    if (!hand_rect_packet.IsEmpty()) {
-      const auto& hand_rects = hand_rect_packet.Get<std::vector<::mediapipe::NormalizedRect>>();
-      LOG(INFO) << "rect[0] square: " << hand_rects[0].height() * hand_rects[0].width() << std::endl;
-      LOG(INFO) << "rect[1] square: " << hand_rects[1].height() * hand_rects[1].width() << std::endl;
+    ::mediapipe::Packet hand_rects_packet;
+    if (!hand_rect_poller.Next(&hand_rects_packet)) break;
+    if (!hand_rects_packet.IsEmpty()) {
+      const auto& hand_rects = hand_rects_packet.Get<std::vector<::mediapipe::NormalizedRect>>();
+      for (int i = 0; i < hand_rects.size(); ++i) {
+          float square = hand_rects[i].height() * hand_rects[i].width();
+          LOG(INFO) << global_handedness[i] << " hand_rect square: " << square << std::endl;
+          // Currently the Video-Touch system works with the right hand only
+          if (global_handedness[i] == "Right") {
+              ss << "rect square: " << square << std::endl;
+          }
+      }
     }
 
     LOG(INFO) << std::endl;
+    
+    // Send info to ZeroMQ
+    const std::string& info_str = ss.str();
+    zmq::message_t msg(info_str.size());
+    std::memcpy(msg.data(), info_str.data(), info_str.size());
+    socket.send(msg);
     
     // Convert back to opencv for display or saving.
     cv::Mat output_frame_mat = ::mediapipe::formats::MatView(&output_frame);
@@ -211,7 +265,19 @@ absl::Status RunMPPGraph(
       const int pressed_key = cv::waitKey(5);
       if (pressed_key >= 0 && pressed_key != 255) grab_frames = false;
     }
+      
+    // Wait for a servers' reply
+    socket.recv(&reply);
+    std::string reply_str = std::string(static_cast<char*>(reply.data()), reply.size());
+      
+    frame_num += 1;
   }
+    
+  // Finish the communication
+  socket.send(zmq::str_buffer("EOQ"));
+    
+  // Close all resources
+  socket.close();
 
   LOG(INFO) << "Shutting down.";
   if (writer.isOpened()) writer.release();

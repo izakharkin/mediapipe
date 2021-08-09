@@ -1353,3 +1353,19 @@ cc_test(
         "//mediapipe/framework/port:gtest_main",
     ],
 )
+
+cc_library(
+    name = "hand_gesture_calculator",
+    srcs = ["hand_gesture_calculator.cc"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//mediapipe/framework:calculator_framework",
+        "//mediapipe/framework/formats:landmark_cc_proto",
+        "//mediapipe/framework/port:status",
+        "//mediapipe/framework/formats:rect_cc_proto",
+        "//mediapipe/framework/port:ret_check",
+        "@org_tensorflow//tensorflow/lite:framework",
+        "@org_tensorflow//tensorflow/lite/kernels:builtin_ops",
+    ],
+    alwayslink = 1,
+)

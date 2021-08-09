@@ -31,6 +31,7 @@ node {
   output_stream: "HAND_ROIS_FROM_LANDMARKS:multi_hand_rects"
   output_stream: "HAND_ROIS_FROM_PALM_DETECTIONS:multi_palm_rects"
   output_stream: "SCALED_LANDMARKS:scaled_landmarks"
+  output_stream: "HAND_GESTURES:hand_gestures"
 }
 
 # Subgraph that renders annotations and overlays them on top of the input

@@ -16,6 +16,12 @@ licenses(["notice"])
 
 package(default_visibility = ["//mediapipe/examples:__subpackages__"])
 
+cc_import(
+  name = "zmq",
+  hdrs = ["zmq.h", "zmq.hpp"],
+  static_library = "libzmq.a",
+)
+
 cc_binary(
     name = "hand_tracking_tflite",
     deps = [
@@ -51,6 +57,7 @@ cc_binary(
         "@com_google_absl//absl/flags:flag",
         "@com_google_absl//absl/flags:parse",
         "//mediapipe/framework/formats:classification_cc_proto",
+        ":zmq",
     ],
 )
 

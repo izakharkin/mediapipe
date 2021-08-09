@@ -39,6 +39,9 @@ output_stream: "HAND_ROIS_FROM_LANDMARKS:hand_rects"
 # (std::vector<NormalizedRect>)
 output_stream: "HAND_ROIS_FROM_PALM_DETECTIONS:hand_rects_from_palm_detections"
 
+# Collection of hand gestures recongnized based on the scaled landmarks.
+output_stream: "HAND_GESTURES:multi_hand_gestures"
+
 # Defines whether landmarks on the previous image should be used to help
 # localize landmarks on the current image.
 node {
@@ -183,6 +186,7 @@ node {
   output_stream: "LANDMARKS:single_hand_landmarks"
   output_stream: "HANDEDNESS:single_handedness"
   output_stream: "SCALED_LANDMARKS:single_hand_scaled_landmarks"
+  output_stream: "HAND_GESTURE:single_hand_gesture"
 }
 
 # Collects the handedness for each single hand into a vector. Upon
@@ -232,6 +236,16 @@ node {
   input_stream: "ITEM:single_hand_rect_from_landmarks"
   input_stream: "BATCH_END:hand_rects_timestamp"
   output_stream: "ITERABLE:hand_rects_from_landmarks"
+}
+
+# Collects a HandGesture (std::string) for each hand into a vector. Upon receiving the
+# BATCH_END timestamp, outputs the vector of std::string at the BATCH_END
+# timestamp.
+node {
+  calculator: "EndLoopStringCalculator"
+  input_stream: "ITEM:single_hand_gesture"
+  input_stream: "BATCH_END:hand_rects_timestamp"
+  output_stream: "ITERABLE:multi_hand_gestures"
 }
 
 # Caches hand rects calculated from landmarks, and upon the arrival of the next
