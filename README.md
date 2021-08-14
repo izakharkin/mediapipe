@@ -1,16 +1,25 @@
 # MediaPipe: Video-Touch edition
 
-[Project website | [Publication (report)](https://dl.acm.org/doi/10.1145/3415255.3422892) | [Video](https://www.youtube.com/watch?v=F4X4jJwDBy4)]
+<div align="center">
+    <img src="docs/images/video_touch_demo.gif">
+    <b>
+        <a href="https://dl.acm.org/doi/10.1145/3415255.3422892">Publication</a> | 
+        <a href="https://arxtage.github.io/videotouch.github.io/">Project website</a> | 
+        <a href="https://www.youtube.com/watch?v=F4X4jJwDBy4">Video</a>
+    </b>
+</div>
 
-Fork of [MediaPipe](https://github.com/google/mediapipe) with hand gesture recognition and message passing to another software.
+Fork of [MediaPipe](https://github.com/google/mediapipe) with hand gesture recognition and message passing to other software.
 
 ## Getting started
 
-### Prerequisites
+This code was tested on macOS Big Sur 11.4 with Intel Core i7 8/9-gen CPU. It should work for Linux as well if one builds the `libzmq.a` (see p. 3 of the next section) themself.
+
+### Installation
 
 1. `git clone https://github.com/izakharkin/mediapipe`
 2. Please follow the official [MediaPipe](https://github.com/google/mediapipe) installation instructions;
-3. To use ZeroMQ message passing mechanism, one need to build the [libzmq.a](https://github.com/zeromq/libzmq). It is quite straightforward following the *Build instructions* section in [cppzmq repo](https://github.com/zeromq/cppzmq#build-instructions) (in the end of the main README.md).
+3. To use ZeroMQ message passing mechanism, one need to build the [libzmq.a](https://github.com/zeromq/libzmq). Just follow the *Build instructions* section in [cppzmq repo](https://github.com/zeromq/cppzmq#build-instructions) (in the end of the main `README.md`).
 
 ### Usage
 
@@ -34,9 +43,13 @@ python mediapipe/examples/desktop/hand_tracking/zmq_server_demo.py
 
 ## Description
 
+<img src="docs/images/video_touch_scheme.png">
+
 We made 2 key modifications to the original version:
 
 ### Hand gesture recognition
+
+<img src="docs/images/recognized_gestures.png">
 
 We added the [`hand_tracking_cpu_main`](https://github.com/izakharkin/mediapipe/blob/master/mediapipe/examples/desktop/hand_tracking/hand_tracking_cpu_main.cc) to make the system recognize hand gestures in real-time. To make this work, we employed hand gesture recognition calculators and made changes to the original `.pbtxt` graphs (see the latest commits).
 
@@ -52,7 +65,7 @@ We used [Jesture AI SDK](https://github.com/jesture-ai/jesture-sdk) (`python/ann
 
 ### ZeroMQ message passing
 
-ZMQ is a tool for message passing between different processes. It allows to communicate between e.g. a binary file compiled from C++ and a python script. In our code, we use the [`hand_tracking_cpu_main`](https://github.com/izakharkin/mediapipe/blob/master/mediapipe/examples/desktop/hand_tracking/hand_tracking_cpu_main.cc) as a Requester and the [`zmq_server_demo.py`](https://github.com/izakharkin/mediapipe/blob/master/mediapipe/examples/desktop/hand_tracking/zmq_server_demo.py) as a Replier (see [REQ-REP strategy](https://learning-0mq-with-pyzmq.readthedocs.io/en/latest/pyzmq/patterns/client_server.html)).
+[ZeroMQ](https://zeromq.org) is a tool for message passing between different processes. It allows to communicate between e.g. a binary file compiled from C++ and a python script. In our code, we use the [`hand_tracking_cpu_main`](https://github.com/izakharkin/mediapipe/blob/master/mediapipe/examples/desktop/hand_tracking/hand_tracking_cpu_main.cc) as a Requester and the [`zmq_server_demo.py`](https://github.com/izakharkin/mediapipe/blob/master/mediapipe/examples/desktop/hand_tracking/zmq_server_demo.py) as a Replier (see [REQ-REP strategy](https://learning-0mq-with-pyzmq.readthedocs.io/en/latest/pyzmq/patterns/client_server.html)).
 
 To make all these things work we used the [cppzmq](https://github.com/zeromq/cppzmq) header files (see [`examples/desktop/hand_tracking`](https://github.com/izakharkin/mediapipe/tree/master/mediapipe/examples/desktop/hand_tracking) dir).
 
