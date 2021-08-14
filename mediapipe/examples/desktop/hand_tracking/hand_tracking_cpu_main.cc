@@ -136,6 +136,8 @@ absl::Status RunMPPGraph(
     
   int frame_num = 0;
   zmq::message_t reply;
+    
+//   std::vector<std::string> hand_gestures;
   
   LOG(INFO) << "Start grabbing and processing frames.";
   while (grab_frames) {
@@ -166,6 +168,7 @@ absl::Status RunMPPGraph(
     if (!poller.Next(&packet)) break;
     auto& output_frame = packet.Get<::mediapipe::ImageFrame>();
       
+    // Excplicitly allow only 2 hands on the frame at most
     std::vector<std::string> global_handedness = {"unkwown", "uknown"};
       
     // This stream is needed to pass info to ZeroMQ
@@ -182,7 +185,7 @@ absl::Status RunMPPGraph(
     if (!handedness_packet.IsEmpty()) {
       const auto& handedness = handedness_packet.Get<std::vector<::mediapipe::ClassificationList>>();
       LOG(INFO) << handedness.size() << std::endl;
-      for (int i = 0; i < handedness.size(); ++i) {
+      for (int i = 0; i < std::min(handedness.size(), global_handedness.size()); ++i) {
         global_handedness[i] = handedness[i].classification(0).label();
         LOG(INFO) << handedness[i].classification(0).label() << std::endl; 
       }
@@ -215,7 +218,8 @@ absl::Status RunMPPGraph(
     if (!hand_gestures_poller.Next(&hand_gestures_packet)) break;
     if (!hand_gestures_packet.IsEmpty()) {
       const auto& hand_gestures = hand_gestures_packet.Get<std::vector<std::string>>();
-      for (int i = 0; i < hand_gestures.size(); ++i) {
+//       hand_gestures = hand_gestures_packet.Get<std::vector<std::string>>();
+      for (int i = 0; i < std::min(hand_gestures.size(), global_handedness.size()); ++i) {
           LOG(INFO) << global_handedness[i] << " hand_gesture: " << hand_gestures[i] << std::endl;
           // Currently the Video-Touch system works with the right hand only
           if (global_handedness[i] == "Right") {
@@ -229,7 +233,7 @@ absl::Status RunMPPGraph(
     if (!hand_rect_poller.Next(&hand_rects_packet)) break;
     if (!hand_rects_packet.IsEmpty()) {
       const auto& hand_rects = hand_rects_packet.Get<std::vector<::mediapipe::NormalizedRect>>();
-      for (int i = 0; i < hand_rects.size(); ++i) {
+      for (int i = 0; i < std::min(hand_rects.size(), global_handedness.size()); ++i) {
           float square = hand_rects[i].height() * hand_rects[i].width();
           LOG(INFO) << global_handedness[i] << " hand_rect square: " << square << std::endl;
           // Currently the Video-Touch system works with the right hand only
