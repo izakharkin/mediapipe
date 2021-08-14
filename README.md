@@ -1,19 +1,22 @@
 # MediaPipe: Video-Touch edition
 
 <div align="center">
-    <img src="docs/images/video_touch_demo.gif">
-    <b>
+    <div align="center">
+        <img src="docs/images/video_touch_demo.gif">
+    </div>
+    <div align="center"><b>
+        <a href="https://github.com/google/mediapipe">MediaPipe</a> fork with hand gesture recognition and message passing to other software.
+    </b></div>
+    <div align="center"><b>
         <a href="https://dl.acm.org/doi/10.1145/3415255.3422892">Publication</a> | 
         <a href="https://arxtage.github.io/videotouch.github.io/">Project website</a> | 
         <a href="https://www.youtube.com/watch?v=F4X4jJwDBy4">Video</a>
-    </b>
+    </b></div>
 </div>
-
-Fork of [MediaPipe](https://github.com/google/mediapipe) with hand gesture recognition and message passing to other software.
 
 ## Getting started
 
-This code was tested on macOS Big Sur 11.4 with Intel Core i7 8/9-gen CPU. It should work for Linux as well if one builds the `libzmq.a` (see p. 3 of the next section) themself.
+This code was tested on macOS Big Sur 11.4 with Intel Core i7 8/9-gen CPU. It should work for Linux as well if one builds the `libzmq.a` themself (see p. 3 of the next section).
 
 ### Installation
 
@@ -43,13 +46,11 @@ python mediapipe/examples/desktop/hand_tracking/zmq_server_demo.py
 
 ## Description
 
-<img src="docs/images/video_touch_scheme.png">
-
 We made 2 key modifications to the original version:
 
 ### Hand gesture recognition
 
-<img src="docs/images/recognized_gestures.png">
+<img src="docs/images/recognized_gestures.png" width=500>
 
 We added the [`hand_tracking_cpu_main`](https://github.com/izakharkin/mediapipe/blob/master/mediapipe/examples/desktop/hand_tracking/hand_tracking_cpu_main.cc) to make the system recognize hand gestures in real-time. To make this work, we employed hand gesture recognition calculators and made changes to the original `.pbtxt` graphs (see the latest commits).
 
