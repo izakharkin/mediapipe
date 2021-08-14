@@ -1,156 +1,96 @@
----
-layout: default
-title: Home
-nav_order: 1
----
+# MediaPipe: Video-Touch edition
 
-![MediaPipe](docs/images/mediapipe_small.png)
+<div align="center">
+    <img src="docs/images/video_touch_demo.gif">
+    <b>
+        <a href="https://dl.acm.org/doi/10.1145/3415255.3422892">Publication</a> | 
+        <a href="https://arxtage.github.io/videotouch.github.io/">Project website</a> | 
+        <a href="https://www.youtube.com/watch?v=F4X4jJwDBy4">Video</a>
+    </b>
+</div>
 
---------------------------------------------------------------------------------
-
-## Live ML anywhere
-
-[MediaPipe](https://google.github.io/mediapipe/) offers cross-platform, customizable
-ML solutions for live and streaming media.
-
-![accelerated.png](docs/images/accelerated_small.png)                                                               | ![cross_platform.png](docs/images/cross_platform_small.png)
-:------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------:
-***End-to-End acceleration***: *Built-in fast ML inference and processing accelerated even on common hardware* | ***Build once, deploy anywhere***: *Unified solution works across Android, iOS, desktop/cloud, web and IoT*
-![ready_to_use.png](docs/images/ready_to_use_small.png)                                                             | ![open_source.png](docs/images/open_source_small.png)
-***Ready-to-use solutions***: *Cutting-edge ML solutions demonstrating full power of the framework*            | ***Free and open source***: *Framework and solutions both under Apache 2.0, fully extensible and customizable*
-
-## ML solutions in MediaPipe
-
-Face Detection                                                                                                                 | Face Mesh                                                                                                       | Iris                                                                                                      | Hands                                                                                                      | Pose                                                                                                      | Holistic
-:----------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------: | :------:
-[![face_detection](docs/images/mobile/face_detection_android_gpu_small.gif)](https://google.github.io/mediapipe/solutions/face_detection) | [![face_mesh](docs/images/mobile/face_mesh_android_gpu_small.gif)](https://google.github.io/mediapipe/solutions/face_mesh) | [![iris](docs/images/mobile/iris_tracking_android_gpu_small.gif)](https://google.github.io/mediapipe/solutions/iris) | [![hand](docs/images/mobile/hand_tracking_android_gpu_small.gif)](https://google.github.io/mediapipe/solutions/hands) | [![pose](docs/images/mobile/pose_tracking_android_gpu_small.gif)](https://google.github.io/mediapipe/solutions/pose) | [![hair_segmentation](docs/images/mobile/holistic_tracking_android_gpu_small.gif)](https://google.github.io/mediapipe/solutions/holistic)
-
-Hair Segmentation                                                                                                                       | Object Detection                                                                                                                     | Box Tracking                                                                                                                | Instant Motion Tracking                                                                                                                               | Objectron                                                                                                             | KNIFT
-:-------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------: | :---:
-[![hair_segmentation](docs/images/mobile/hair_segmentation_android_gpu_small.gif)](https://google.github.io/mediapipe/solutions/hair_segmentation) | [![object_detection](docs/images/mobile/object_detection_android_gpu_small.gif)](https://google.github.io/mediapipe/solutions/object_detection) | [![box_tracking](docs/images/mobile/object_tracking_android_gpu_small.gif)](https://google.github.io/mediapipe/solutions/box_tracking) | [![instant_motion_tracking](docs/images/mobile/instant_motion_tracking_android_small.gif)](https://google.github.io/mediapipe/solutions/instant_motion_tracking) | [![objectron](docs/images/mobile/objectron_chair_android_gpu_small.gif)](https://google.github.io/mediapipe/solutions/objectron) | [![knift](docs/images/mobile/template_matching_android_cpu_small.gif)](https://google.github.io/mediapipe/solutions/knift)
-
-<!-- []() in the first cell is needed to preserve table formatting in GitHub Pages. -->
-<!-- Whenever this table is updated, paste a copy to solutions/solutions.md. -->
-
-[]()                                                                                      | [Android](https://google.github.io/mediapipe/getting_started/android) | [iOS](https://google.github.io/mediapipe/getting_started/ios) | [C++](https://google.github.io/mediapipe/getting_started/cpp) | [Python](https://google.github.io/mediapipe/getting_started/python) | [JS](https://google.github.io/mediapipe/getting_started/javascript) | [Coral](https://github.com/google/mediapipe/tree/master/mediapipe/examples/coral/README.md)
-:---------------------------------------------------------------------------------------- | :-------------------------------------------------------------: | :-----------------------------------------------------: | :-----------------------------------------------------: | :-----------------------------------------------------------: | :-----------------------------------------------------------: | :--------------------------------------------------------------------:
-[Face Detection](https://google.github.io/mediapipe/solutions/face_detection)                   | ✅                                                               | ✅                                                       | ✅                                                       | ✅                                                             | ✅                                                             | ✅
-[Face Mesh](https://google.github.io/mediapipe/solutions/face_mesh)                             | ✅                                                               | ✅                                                       | ✅                                                       | ✅                                                             | ✅                                                             |
-[Iris](https://google.github.io/mediapipe/solutions/iris)                                       | ✅                                                               | ✅                                                       | ✅                                                       |                                                               |                                                               |
-[Hands](https://google.github.io/mediapipe/solutions/hands)                                     | ✅                                                               | ✅                                                       | ✅                                                       | ✅                                                             | ✅                                                             |
-[Pose](https://google.github.io/mediapipe/solutions/pose)                                       | ✅                                                               | ✅                                                       | ✅                                                       | ✅                                                             | ✅                                                             |
-[Holistic](https://google.github.io/mediapipe/solutions/holistic)                               | ✅                                                               | ✅                                                       | ✅                                                       | ✅                                                             | ✅                                                             |
-[Selfie Segmentation](https://google.github.io/mediapipe/solutions/selfie_segmentation)         | ✅                                                               | ✅                                                       | ✅                                                       | ✅                                                             | ✅                                                             |
-[Hair Segmentation](https://google.github.io/mediapipe/solutions/hair_segmentation)             | ✅                                                               |                                                         | ✅                                                       |                                                               |                                                               |
-[Object Detection](https://google.github.io/mediapipe/solutions/object_detection)               | ✅                                                               | ✅                                                       | ✅                                                       |                                                               |                                                               | ✅
-[Box Tracking](https://google.github.io/mediapipe/solutions/box_tracking)                       | ✅                                                               | ✅                                                       | ✅                                                       |                                                               |                                                               |
-[Instant Motion Tracking](https://google.github.io/mediapipe/solutions/instant_motion_tracking) | ✅                                                               |                                                         |                                                         |                                                               |                                                               |
-[Objectron](https://google.github.io/mediapipe/solutions/objectron)                             | ✅                                                               |                                                         | ✅                                                       | ✅                                                             | ✅                                                             |
-[KNIFT](https://google.github.io/mediapipe/solutions/knift)                                     | ✅                                                               |                                                         |                                                         |                                                               |                                                               |
-[AutoFlip](https://google.github.io/mediapipe/solutions/autoflip)                               |                                                                 |                                                         | ✅                                                       |                                                               |                                                               |
-[MediaSequence](https://google.github.io/mediapipe/solutions/media_sequence)                    |                                                                 |                                                         | ✅                                                       |                                                               |                                                               |
-[YouTube 8M](https://google.github.io/mediapipe/solutions/youtube_8m)                           |                                                                 |                                                         | ✅                                                       |                                                               |                                                               |
-
-See also
-[MediaPipe Models and Model Cards](https://google.github.io/mediapipe/solutions/models)
-for ML models released in MediaPipe.
+Fork of [MediaPipe](https://github.com/google/mediapipe) with hand gesture recognition and message passing to other software.
 
 ## Getting started
 
-To start using MediaPipe
-[solutions](https://google.github.io/mediapipe/solutions/solutions) with only a few
-lines code, see example code and demos in
-[MediaPipe in Python](https://google.github.io/mediapipe/getting_started/python) and
-[MediaPipe in JavaScript](https://google.github.io/mediapipe/getting_started/javascript).
+This code was tested on macOS Big Sur 11.4 with Intel Core i7 8/9-gen CPU. It should work for Linux as well if one builds the `libzmq.a` (see p. 3 of the next section) themself.
 
-To use MediaPipe in C++, Android and iOS, which allow further customization of
-the [solutions](https://google.github.io/mediapipe/solutions/solutions) as well as
-building your own, learn how to
-[install](https://google.github.io/mediapipe/getting_started/install) MediaPipe and
-start building example applications in
-[C++](https://google.github.io/mediapipe/getting_started/cpp),
-[Android](https://google.github.io/mediapipe/getting_started/android) and
-[iOS](https://google.github.io/mediapipe/getting_started/ios).
+### Installation
 
-The source code is hosted in the
-[MediaPipe Github repository](https://github.com/google/mediapipe), and you can
-run code search using
-[Google Open Source Code Search](https://cs.opensource.google/mediapipe/mediapipe).
+1. `git clone https://github.com/izakharkin/mediapipe`
+2. Please follow the official [MediaPipe](https://github.com/google/mediapipe) installation instructions;
+3. To use ZeroMQ message passing mechanism, one need to build the [libzmq.a](https://github.com/zeromq/libzmq). Just follow the *Build instructions* section in [cppzmq repo](https://github.com/zeromq/cppzmq#build-instructions) (in the end of the main `README.md`).
 
-## Publications
+### Usage
 
-*   [Bringing artworks to life with AR](https://developers.googleblog.com/2021/07/bringing-artworks-to-life-with-ar.html)
-    in Google Developers Blog
-*   [Prosthesis control via Mirru App using MediaPipe hand tracking](https://developers.googleblog.com/2021/05/control-your-mirru-prosthesis-with-mediapipe-hand-tracking.html)
-    in Google Developers Blog
-*   [SignAll SDK: Sign language interface using MediaPipe is now available for
-    developers](https://developers.googleblog.com/2021/04/signall-sdk-sign-language-interface-using-mediapipe-now-available.html)
-    in Google Developers Blog
-*   [MediaPipe Holistic - Simultaneous Face, Hand and Pose Prediction, on Device](https://ai.googleblog.com/2020/12/mediapipe-holistic-simultaneous-face.html)
-    in Google AI Blog
-*   [Background Features in Google Meet, Powered by Web ML](https://ai.googleblog.com/2020/10/background-features-in-google-meet.html)
-    in Google AI Blog
-*   [MediaPipe 3D Face Transform](https://developers.googleblog.com/2020/09/mediapipe-3d-face-transform.html)
-    in Google Developers Blog
-*   [Instant Motion Tracking With MediaPipe](https://developers.googleblog.com/2020/08/instant-motion-tracking-with-mediapipe.html)
-    in Google Developers Blog
-*   [BlazePose - On-device Real-time Body Pose Tracking](https://ai.googleblog.com/2020/08/on-device-real-time-body-pose-tracking.html)
-    in Google AI Blog
-*   [MediaPipe Iris: Real-time Eye Tracking and Depth Estimation](https://ai.googleblog.com/2020/08/mediapipe-iris-real-time-iris-tracking.html)
-    in Google AI Blog
-*   [MediaPipe KNIFT: Template-based feature matching](https://developers.googleblog.com/2020/04/mediapipe-knift-template-based-feature-matching.html)
-    in Google Developers Blog
-*   [Alfred Camera: Smart camera features using MediaPipe](https://developers.googleblog.com/2020/03/alfred-camera-smart-camera-features-using-mediapipe.html)
-    in Google Developers Blog
-*   [Real-Time 3D Object Detection on Mobile Devices with MediaPipe](https://ai.googleblog.com/2020/03/real-time-3d-object-detection-on-mobile.html)
-    in Google AI Blog
-*   [AutoFlip: An Open Source Framework for Intelligent Video Reframing](https://ai.googleblog.com/2020/02/autoflip-open-source-framework-for.html)
-    in Google AI Blog
-*   [MediaPipe on the Web](https://developers.googleblog.com/2020/01/mediapipe-on-web.html)
-    in Google Developers Blog
-*   [Object Detection and Tracking using MediaPipe](https://developers.googleblog.com/2019/12/object-detection-and-tracking-using-mediapipe.html)
-    in Google Developers Blog
-*   [On-Device, Real-Time Hand Tracking with MediaPipe](https://ai.googleblog.com/2019/08/on-device-real-time-hand-tracking-with.html)
-    in Google AI Blog
-*   [MediaPipe: A Framework for Building Perception Pipelines](https://arxiv.org/abs/1906.08172)
+1. Build the hand tracking desktop CPU example:
 
-## Videos
+```
+bazel build -c opt --define MEDIAPIPE_DISABLE_GPU=1 mediapipe/examples/desktop/hand_tracking:hand_tracking_cpu
+```
 
-*   [YouTube Channel](https://www.youtube.com/c/MediaPipe)
+2. Run:
 
-## Events
+```
+GLOG_logtostderr=1 bazel-bin/mediapipe/examples/desktop/hand_tracking/hand_tracking_cpu
+```
 
-*   [MediaPipe Seattle Meetup, Google Building Waterside, 13 Feb 2020](https://mediapipe.page.link/seattle2020)
-*   [AI Nextcon 2020, 12-16 Feb 2020, Seattle](http://aisea20.xnextcon.com/)
-*   [MediaPipe Madrid Meetup, 16 Dec 2019](https://www.meetup.com/Madrid-AI-Developers-Group/events/266329088/)
-*   [MediaPipe London Meetup, Google 123 Building, 12 Dec 2019](https://www.meetup.com/London-AI-Tech-Talk/events/266329038)
-*   [ML Conference, Berlin, 11 Dec 2019](https://mlconference.ai/machine-learning-advanced-development/mediapipe-building-real-time-cross-platform-mobile-web-edge-desktop-video-audio-ml-pipelines/)
-*   [MediaPipe Berlin Meetup, Google Berlin, 11 Dec 2019](https://www.meetup.com/Berlin-AI-Tech-Talk/events/266328794/)
-*   [The 3rd Workshop on YouTube-8M Large Scale Video Understanding Workshop,
-    Seoul, Korea ICCV
-    2019](https://research.google.com/youtube8m/workshop2019/index.html)
-*   [AI DevWorld 2019, 10 Oct 2019, San Jose, CA](https://aidevworld.com)
-*   [Google Industry Workshop at ICIP 2019, 24 Sept 2019, Taipei, Taiwan](http://2019.ieeeicip.org/?action=page4&id=14#Google)
-    ([presentation](https://docs.google.com/presentation/d/e/2PACX-1vRIBBbO_LO9v2YmvbHHEt1cwyqH6EjDxiILjuT0foXy1E7g6uyh4CesB2DkkEwlRDO9_lWfuKMZx98T/pub?start=false&loop=false&delayms=3000&slide=id.g556cc1a659_0_5))
-*   [Open sourced at CVPR 2019, 17~20 June, Long Beach, CA](https://sites.google.com/corp/view/perception-cv4arvr/mediapipe)
+3. By default, the example sends hand tracking data via [ZeroMQ](https://zeromq.org) to a server. One may use [`zmq_server_demo.py`](https://github.com/izakharkin/mediapipe/blob/master/mediapipe/examples/desktop/hand_tracking/zmq_server_demo.py) to check the full pipeline:
 
-## Community
+```
+python mediapipe/examples/desktop/hand_tracking/zmq_server_demo.py
+```
 
-*   [Awesome MediaPipe](https://mediapipe.org) - A curated list of awesome
-    MediaPipe related frameworks, libraries and software
-*   [Slack community](https://mediapipe.page.link/joinslack) for MediaPipe users
-*   [Discuss](https://groups.google.com/forum/#!forum/mediapipe) - General
-    community discussion around MediaPipe
+## Description
 
-## Alpha disclaimer
+<img src="docs/images/video_touch_scheme.png">
 
-MediaPipe is currently in alpha at v0.7. We may be still making breaking API
-changes and expect to get to stable APIs by v1.0.
+We made 2 key modifications to the original version:
 
-## Contributing
+### Hand gesture recognition
 
-We welcome contributions. Please follow these
-[guidelines](https://github.com/google/mediapipe/blob/master/CONTRIBUTING.md).
+<img src="docs/images/recognized_gestures.png">
 
-We use GitHub issues for tracking requests and bugs. Please post questions to
-the MediaPipe Stack Overflow with a `mediapipe` tag.
+We added the [`hand_tracking_cpu_main`](https://github.com/izakharkin/mediapipe/blob/master/mediapipe/examples/desktop/hand_tracking/hand_tracking_cpu_main.cc) to make the system recognize hand gestures in real-time. To make this work, we employed hand gesture recognition calculators and made changes to the original `.pbtxt` graphs (see the latest commits).
+
+Currently there are 2 versions of hand gesture calculcator:
+
+1. [`HandGestureCalculator`](https://github.com/izakharkin/mediapipe/blob/master/mediapipe/calculators/util/hand_gesture_calculator.cc): rule-based hand gesture recognition. Inspired by the code from the [TheJLifeX](https://gist.github.com/TheJLifeX) repo.
+
+2. [`HandGestureCalculatorNN`](https://github.com/izakharkin/mediapipe/blob/master/mediapipe/calculators/util/hand_gesture_calculator_nn.cc): neural network-based gesture recognition.
+
+By default, `HandGestureCalculator` is used. Feel free to modify the [hand_landmark_cpu.pbtxt](https://github.com/izakharkin/mediapipe/blob/d22b4668fc8012c639ecc1cb0f7fcf80954ecd30/mediapipe/modules/hand_landmark/hand_landmark_cpu.pbtxt#L171) graph to change the gesture calculator.
+
+We used [Jesture AI SDK](https://github.com/jesture-ai/jesture-sdk) (`python/annotation.py`) to collect the data for neural network training.
+
+### ZeroMQ message passing
+
+[ZeroMQ](https://zeromq.org) is a tool for message passing between different processes. It allows to communicate between e.g. a binary file compiled from C++ and a python script. In our code, we use the [`hand_tracking_cpu_main`](https://github.com/izakharkin/mediapipe/blob/master/mediapipe/examples/desktop/hand_tracking/hand_tracking_cpu_main.cc) as a Requester and the [`zmq_server_demo.py`](https://github.com/izakharkin/mediapipe/blob/master/mediapipe/examples/desktop/hand_tracking/zmq_server_demo.py) as a Replier (see [REQ-REP strategy](https://learning-0mq-with-pyzmq.readthedocs.io/en/latest/pyzmq/patterns/client_server.html)).
+
+To make all these things work we used the [cppzmq](https://github.com/zeromq/cppzmq) header files (see [`examples/desktop/hand_tracking`](https://github.com/izakharkin/mediapipe/tree/master/mediapipe/examples/desktop/hand_tracking) dir).
+
+## Citation
+
+If you find this code useful for your purposes, please don't hesitate to refer to our original SIGGRAPH Asia 2020 publication:
+
+```
+@inproceedings{
+    10.1145/3415255.3422892, 
+    author = {Zakharkin, Ilya and Tsaturyan, Arman and Cabrera, Miguel Altamirano and Tirado, Jonathan and Tsetserukou, Dzmitry}, 
+    title = {ZoomTouch: Multi-User Remote Robot Control in Zoom by DNN-Based Gesture Recognition}, 
+    year = {2020}, 
+    publisher = {Association for Computing Machinery}, 
+    url = {https://doi.org/10.1145/3415255.3422892}, 
+    doi = {10.1145/3415255.3422892}, 
+    booktitle = {SIGGRAPH Asia 2020 Emerging Technologies}, 
+    keywords = {Robotics, Hand Tracking, Gesture Recognition, Teleoperation}, 
+    location = {Virtual Event, Republic of Korea}, 
+    series = {SA '20} 
+}
+```
+
+We thank [TheJLifeX](https://gist.github.com/TheJLifeX) for the ideas on how to implement the rule-based gesture recognition calculator.
+
+## License
+
+This repo is open-sourced under the Apache License 2.0. Please also see the [original MediaPipe license](https://github.com/google/mediapipe/blob/master/LICENSE).
